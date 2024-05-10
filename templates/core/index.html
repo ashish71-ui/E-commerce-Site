@@ -1,0 +1,72 @@
+{% extends "core/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block title %}Ecommerce Store{% endblock %}
+    <!-- Include Tailwind CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+{% comment %} <!-- Navigation Bar -->
+<nav class="bg-gray-900 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+        <a href="#" class="text-2xl font-bold">Ecommerce Store</a>
+        <ul class="flex space-x-4">
+            <li><a href="#" class="hover:underline">Home</a></li>
+            <li><a href="#" class="hover:underline">Shop</a></li>
+            <li><a href="#" class="hover:underline">About</a></li>
+            <li><a href="#" class="hover:underline">Contact</a></li>
+        </ul>
+        <a href="{% url 'userauths:logout' %}">Logout</a>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="bg-gray-800 text-white py-20 px-4">
+    <div class="container mx-auto text-center">
+        <h1 class="text-4xl font-bold mb-4">Welcome to Our Ecommerce Store</h1>
+        <p class="text-lg mb-8">Discover amazing products at great prices.</p>
+        <a href="#" class="bg-white text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300">Shop Now</a>
+    </div>
+</div> {% endcomment %}
+{% block content %}
+<div class="container mx-auto mt-16 ">
+    <h2 class="text-2xl font-bold mb-8">Featured Products</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {% for product in products %}
+        <!-- Product Card --><a href="{% url 'core:product_detail_view' product.pid %}">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-64 object-cover">
+            <div class="p-4">
+                <h3 class="text-xl font-semibold mb-2">{{ product.title }}</h3>
+                <h3 class="text-2xl font-bold mb-2">{{ product.category.title }}</h3>
+                <h3 class="text-2xl font-bold mb-2">{{ product.vendor.title }}</h3>
+                <p class="text-gray-600">{{ product.description }}</p>
+                <p class="text-red-600">-{{ product.get_percentage |floatformat:0 }}</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <span class="font-bold">${{ product.price }}</span>
+                    <del class="font-bold">${{ product.old_price }}</del>
+
+                    <button class="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300">Add to Cart</button>
+                </div>
+            </div>
+        </div>
+       </a>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% comment %} <!-- Footer -->
+<footer class="bg-gray-900 text-white py-8 mt-16">
+    <div class="container mx-auto text-center">
+        <p>&copy; 2024 Ecommerce Store. All rights reserved.</p>
+    </div>
+</footer> {% endcomment %}
+
+</body>
+</html>
