@@ -120,11 +120,21 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT= os.path.join(BASE_DIR,'static')
+# STATIC_URL = '/static/'
+# STATIC_ROOT= os.path.join(BASE_DIR,'static')
+# STATICFILES_DIRS = [
+#     'D:/e-com/ecommerce/staticfiles',  # Adjust the path as needed
+# ]
+STATIC_URL = '/static/'
+
+# Directory where Django will look for additional static files
 STATICFILES_DIRS = [
-    'D:/e-com/ecommerce/staticfiles',  # Adjust the path as needed
+    os.path.join(BASE_DIR, 'static'),
+    # Add more directories if needed
 ]
+
+# Directory where Django will collect static files to be served in production
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 

@@ -1,0 +1,10 @@
+{% if cart %}
+    <h2>Your Cart</h2>
+    <ul>
+        {% for item in cart.cartorderitems_set.all %}
+            <li>{{ item.product.title }} - Quantity: {{ item.qty }}</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Your cart is empty</p>
+{% endif %}

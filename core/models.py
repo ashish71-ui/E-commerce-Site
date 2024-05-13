@@ -125,6 +125,7 @@ class CartOrder(models.Model):
     
 class CartOrderItems(models.Model):
     order = models.ForeignKey(CartOrder, on_delete=models.CASCADE)
+    product =  models.ForeignKey(Product, on_delete=models.SET_NULL,null=True)
     invoice_no = models.CharField(max_length=200)
     order_date = models.DateTimeField(auto_now_add=True)
     product_status = models.CharField(max_length=200)
