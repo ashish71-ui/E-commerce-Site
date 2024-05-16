@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+   
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #  'userauths.middleware.RedirectIfNotAuthenticatedMiddleware',
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'
@@ -117,14 +119,8 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-# STATIC_URL = '/static/'
-# STATIC_ROOT= os.path.join(BASE_DIR,'static')
-# STATICFILES_DIRS = [
-#     'D:/e-com/ecommerce/staticfiles',  # Adjust the path as needed
-# ]
+
 STATIC_URL = '/static/'
 
 # Directory where Django will look for additional static files

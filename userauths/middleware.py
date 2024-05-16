@@ -1,0 +1,13 @@
+
+
+from django.http import HttpResponseRedirect
+from django.conf import settings
+
+class RedirectIfNotAuthenticatedMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if not request.user.is_authenticated and not request.path.startswith(settings.LOGIN_URL):
+            return HttpResponseRedirect(settings.LOGIN_URL)
+        return self.get_response(request)

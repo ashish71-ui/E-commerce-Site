@@ -1,6 +1,11 @@
 from django.shortcuts import render, HttpResponse
 from core.models import CartOrder,Category,Vendor,Product,ProductImages,ProductReview,CartOrderItems,WishList,Address
 from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+from django.conf import settings
+
+
 
 def base(request):
     products = Product.objects.all().order_by("-id")
@@ -12,6 +17,7 @@ def base(request):
          "categories":categories
     }
     return render(request,'core/base.html',context)
+
 def index(request):
     products = Product.objects.all().order_by("-id")
     # products = Product.objects.filter(featured = True).order_by("-id")
@@ -73,6 +79,7 @@ def search(request):
         "query":query
     }
     return render(request,'core/search.html',context)
+@login_required
 def add_to_cart(request, pid):
     product = get_object_or_404(Product, pid=pid)
     
@@ -91,7 +98,7 @@ def add_to_cart(request, pid):
         cart_item = CartOrderItems.objects.create(order=cart, product=product, qty=1)
     
     return redirect('core:cart_view')   
-
+@login_required
 def cart_view(request):
     cart = CartOrder.objects.filter(user=request.user).first()
     context = {'cart': cart}

@@ -1,10 +1,23 @@
+{% extends 'core/base.html' %}
+{% block content %}
 {% if cart %}
-    <h2>Your Cart</h2>
-    <ul>
+<h2 class="text-2xl text-center font-bold mb-8">Your Cart</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+    
         {% for item in cart.cartorderitems_set.all %}
-            <li>{{ item.product.title }} - Quantity: {{ item.qty }}</li>
-        {% endfor %}
-    </ul>
+       
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}" class=" h-64 object-cover">
+            <div class="p-4">
+                <h3 class="text-xl font-semibold mb-2">{{ item.product.title }}</h3>
+                <h3 class="text-2xl font-bold mb-2">{{ item.product.price }}</h3>
+                <h3 class="text-2xl font-bold mb-2">Quantity:{{ item.qty }}</h3>
+                </div>
+                </div>
+    {% endfor %}
+</div>
 {% else %}
     <p>Your cart is empty</p>
 {% endif %}
+{% endblock content %}

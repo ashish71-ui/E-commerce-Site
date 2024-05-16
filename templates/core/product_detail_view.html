@@ -36,13 +36,22 @@
           <div class="mt-4 flex justify-between items-center">
             <span class="font-bold">${{ product.price }}</span>
             <del class="font-bold">${{ product.old_price }}</del>
-
-            <button class="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300">Add to Cart</button>
+            <form action="{% url 'core:add_to_cart' product.pid %}" method="post">
+              {% csrf_token %}
+              {% if request.user.is_authenticated%}
+              <button class="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300">Add to Cart</button>
+              {% else %}
+          </form>
+            <a href="{% url 'userauths:loginform' %}" class="ml-4 flex items-center">
+              
+              <button class="bg-blue-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300">Login to buy</button>
+            </a>
+            
+            {% endif %}              </div>
+    </div>
           </div>
         </div>
-        <div class="mt-4">
-          <button class="bg-indigo-500 text-white px-4 py-2 rounded-md hover:bg-indigo-600 focus:outline-none focus:bg-indigo-600">Add to Cart</button>
-        </div>
+        
       </div>
     </div>
   </div>
@@ -68,8 +77,11 @@
                   <span class="font-bold">${{ product.price }}</span>
                   <del class="font-bold">${{ product.old_price }}</del>
 
+                  {% if request.user.is_authenticated%}
                   <button class="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300">Add to Cart</button>
-              </div>
+                 
+                 
+                  {% endif %}              </div>
           </div>
       </div>
      </a>

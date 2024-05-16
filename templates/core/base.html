@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
 <script src='https://cdn.tailwindcss.com'></script> 
 {% load static %}
 <title> {% block title %}  welcome {% endblock  %}  |   HTML Heading Template</title>
@@ -15,14 +17,16 @@
       <div class="container mx-auto flex justify-between items-center">
         <a href="#" class="text-2xl font-bold">Ecommerce Store</a>
         <ul class="flex space-x-4">
-          <li><a href="{% url 'core:base' %}" class="hover:underline">Home</a></li>
-          <li><a href="{% url 'core:index' %}" class="hover:underline">Shop</a></li>
+          <li><a href="{% url 'core:base' %}" class="hover:underline">
+            Home</a></li>
+          
           <li><a href="#" class="hover:underline">About</a></li>
           <li><a href="#" class="hover:underline">Contact</a></li>
           <a href="{% url 'core:category_list' %}" class="ml-4 flex items-center">
            
             <span>Categories</span>
           </a>
+         
         </ul>
         <div class="flex items-center">
         
@@ -30,7 +34,26 @@
             <input id="searchInput" type="text" name="query" placeholder="Search..." class="text-blue-900 border border-gray-400 rounded-l px-2 py-1 focus:outline-none focus:border-blue-500">
             <button type="submit" class="bg-orange-500 text-white px-4 py-1 rounded-r hover:bg-orange-600 focus:outline-none">Search</button>
         </form>
-      
+        
+        
+        {% if request.user.is_authenticated%}
+        <a href="{% url 'core:index' %}" class="hover:text-2xl ml-4 flex items-center">
+          <i class="fas fa-shopping-bag mr-1"></i>
+          Shop
+        </a>
+        
+        <a href="{% url 'core:cart_view' %}" class="hover:text-2xl ml-4 flex items-center">
+        
+          Cart
+        </a>
+        
+        <a href="{% url 'userauths:logout' %}" class="hover:text-2xl ml-4 flex items-center">
+          Logout
+          
+         
+        </a>
+        
+        {% else %}
           <a href="{% url 'userauths:loginform' %}" class="ml-4 flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m16-4H4m16 8H4m4 4h16m-8-8a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -43,21 +66,14 @@
             </svg>
             <span>Signup</span>
           </a>
+          {% endif %}
+
         </div>
       </div>
     </nav>
     
 
-<!-- Hero Section -->
- {% comment %} <div class="bg-orange-600 text-white py-20 px-4 mt-5 h-50">
-  <div class="container mx-auto text-center">
-      <h1 class="text-4xl font-bold mb-4">Welcome to Our Ecommerce Store</h1>
-      <p class="text-lg mb-8">Discover amazing products at great prices.</p>
-      <a href="#" class="bg-white text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-gray-200 transition duration-300">Shop Now</a>
-  </div>
-</div>  {% endcomment %}
-<!-- component -->
-<!-- This is an example component -->
+
 <div class=" mx-auto">
 
 	<div id="default-carousel" class="relative" data-carousel="static">

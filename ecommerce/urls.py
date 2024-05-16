@@ -5,12 +5,18 @@ from django.urls import path , include
 from core.views import index
 from django.conf import settings
 from django.conf.urls.static import static
+from userauths.views import user_login
+from core.views import base
+
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include("core.urls")),
      path('user/', include("userauths.urls")),
+       path('userauths/loginform/', user_login, name='login_form'),
+       path('core/base/', base, name='base'),
+       
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
