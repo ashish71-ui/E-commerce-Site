@@ -1,5 +1,5 @@
 from django.urls import path
-from core.views import index,category_list,category_product_list_view,vendor_list, vendor_product_list_view,product_detail_view,base,search,add_to_cart,cart_view
+from core.views import index,category_list,category_product_list_view,vendor_list, vendor_product_list_view,product_detail_view,base,search,add_to_cart,cart_view,product_list
 from django.conf import settings
 from django.conf.urls.static import static
 app_name ="core"
@@ -15,5 +15,6 @@ urlpatterns = [
     path('search',search, name='search'),
     path('add_to_cart/<pid>/', add_to_cart, name='add_to_cart'),
     path('cart_view/', cart_view, name='cart_view'),
+     path('products/', product_list, name='product_list'),
      
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -4,6 +4,8 @@ from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.conf import settings
+from django.http import JsonResponse
+from django.template.loader import render_to_string
 
 
 
@@ -103,3 +105,26 @@ def cart_view(request):
     cart = CartOrder.objects.filter(user=request.user).first()
     context = {'cart': cart}
     return render(request, 'core/cart.html', context)
+
+def product_list(request):
+    vendor_ids = request.GET.get('vendors', '').split(',')
+    category_ids = request.GET.get('categories', '').split(',')
+
+    products = Product.objects.all()
+
+    if vendor_ids != ['']:
+        products = products.filter(vendor__vid__in=vendor_ids)
+    
+    if category_ids != ['']:
+        products = products.filter(category__cid__in=category_ids)
+
+    if request.headers.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
+        html = render_to_string('product_list_partial.html', {'products': products})
+        return JsonResponse({'html': html})
+
+    context = {
+        'products': products,
+        'vendors': Vendor.objects.all(),
+        'categories': Category.objects.all(),
+    }
+    return render(request, 'core/product_list_partial.html', context)

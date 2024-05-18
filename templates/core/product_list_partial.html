@@ -1,0 +1,45 @@
+<div class="container flex flex-row m-5">
+    <div class="w-1/5">
+      <h2 class="text-2xl font-bold mb-8 ">Categories</h2>
+      <div class="grid gap-4">
+        {% for category in categories %}
+        <a href="{% url 'core:category_product_list_view' category.cid %}" class="block bg-white rounded-lg shadow-md overflow-hidden hover:bg-gray-100 transition duration-300">
+          <div class="p-4">
+            <h3 class="text-xl font-semibold mb-2">{{ category.title }}</h3>
+            
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  
+    
+    <div class="ml-20 w-full px-6 ">
+      <div class=" rounded-lg shadow-lg overflow-hidden">
+      <h2 class="text-2xl font-bold text-orange-600 mb-8 text-center ">Popular Products</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {% for product in products %}
+        <!-- Product Card -->
+        <a href="{% url 'core:product_detail_view' product.pid %}">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-64 object-cover">
+            <div class="p-4">
+                <h3 class="text-xl font-semibold mb-2">{{ product.title }}</h3>
+                {% comment %} <h3 class="text-2xl font-bold mb-2">{{ product.category.title }}</h3>
+                <h3 class="text-2xl font-bold mb-2">{{ product.vendor.title }}</h3>
+                <p class="text-gray-600">{{ product.description }}</p> {% endcomment %}
+                <p class="text-red-600">-{{ product.get_percentage |floatformat:0 }}</p>
+                <div class="mt-4 flex justify-between items-center">
+                    <span class="font-bold">${{ product.price }}</span>
+                    <del class="font-bold">${{ product.old_price }}</del>
+  
+                </div>
+            </div>
+        </div>
+       </a>
+        {% endfor %}
+    </div>
+    </div>
+  </div>
+  </div>
+  
