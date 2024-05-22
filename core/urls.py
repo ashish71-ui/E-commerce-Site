@@ -2,6 +2,7 @@ from django.urls import path
 from core.views import index,category_list,category_product_list_view,vendor_list, vendor_product_list_view,product_detail_view,base,search,add_to_cart,cart_view,product_list
 from django.conf import settings
 from django.conf.urls.static import static
+from core import views
 app_name ="core"
 
 urlpatterns = [
@@ -16,5 +17,10 @@ urlpatterns = [
     path('add_to_cart/<pid>/', add_to_cart, name='add_to_cart'),
     path('cart_view/', cart_view, name='cart_view'),
      path('products/', product_list, name='product_list'),
-     
+     path('initiate-payment/', views.initiate_payment, name='initiate_payment'),
+    path('payment/success/', views.payment_success, name='payment_success'),
+    path('payment/failure/', views.payment_failure, name='payment_failure'),
+      path('update-cart-item/', views.update_cart_item, name='update_cart_item'),
+    path('delete-cart-item/', views.delete_cart_item, name='delete_cart_item'),
+    path('final_payment/', views.final_payment, name='final_payment'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

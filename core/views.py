@@ -6,8 +6,17 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.shortcuts import render
+from django.conf import settings
+import uuid
+import hmac
+import hashlib
+from django.views.decorators.csrf import csrf_exempt
+from .models import CartOrder, CartOrderItems
+from .forms import UpdateQuantityForm, DeleteItemForm
+import base64
 
-
+from django.views.decorators.http import require_POST
 
 def base(request):
     products = Product.objects.all().order_by("-id")
@@ -103,9 +112,49 @@ def add_to_cart(request, pid):
 @login_required
 def cart_view(request):
     cart = CartOrder.objects.filter(user=request.user).first()
-    context = {'cart': cart}
+    total_price = 0
+
+    if cart:
+        for item in cart.cartorderitems_set.all():
+            total_price += item.product.price * item.qty
+
+    context = {'cart': cart, 'total_price': total_price}
+    return render(request, 'core/cart.html', context)
+@login_required
+@require_POST
+def update_cart_item(request):
+    item_id = request.POST.get('item_id')
+    action = request.POST.get('action')
+    item = get_object_or_404(CartOrderItems, id=item_id, order__user=request.user)
+
+    if action == 'increase':
+        item.qty += 1
+    elif action == 'decrease' and item.qty > 1:
+        item.qty -= 1
+    item.save()
+
+    return JsonResponse({'qty': item.qty})
+def final_payment(request):
+    cart = CartOrder.objects.filter(user=request.user).first()
+    total_price = 0
+    delivery_charge = 100
+    
+
+    if cart:
+        for item in cart.cartorderitems_set.all():
+            total_price += item.product.price * item.qty
+    tax = 0
+    final_price = total_price + delivery_charge + tax
+    context = {'cart': cart, 'total_price': total_price,"delivery_charge":delivery_charge,"final_price":final_price,'tax':tax}
     return render(request, 'core/cart.html', context)
 
+@login_required
+@require_POST
+def delete_cart_item(request):
+    item_id = request.POST.get('item_id')
+    item = get_object_or_404(CartOrderItems, id=item_id, order__user=request.user)
+    item.delete()
+    return JsonResponse({'success': True})
 def product_list(request):
     vendor_ids = request.GET.get('vendors', '').split(',')
     category_ids = request.GET.get('categories', '').split(',')
@@ -128,3 +177,57 @@ def product_list(request):
         'categories': Category.objects.all(),
     }
     return render(request, 'core/product_list_partial.html', context)
+
+
+
+# payment
+
+
+def generate_signature(total_amount, transaction_uuid, product_code, secret_key):
+    concatenated_data = f'total_amount={total_amount}&transaction_uuid={transaction_uuid}&product_code={product_code}'
+    signature = hmac.new(secret_key.encode('utf-8'), concatenated_data.encode('utf-8'), hashlib.sha256).digest()
+    base64_signature = base64.b64encode(signature).decode('utf-8')
+    return base64_signature
+
+def initiate_payment(request):
+    # Generate unique transaction ID
+    transaction_id = uuid.uuid4()
+
+    # Prepare payment data
+    payment_data = {
+        'amount': 200,
+        'tax_amount': 10,
+        'total_amount': 110,
+        'transaction_uuid': transaction_id,
+        'product_code': 'EPAYTEST',
+        'product_service_charge': 0,
+        'product_delivery_charge': 0,
+        'success_url': request.build_absolute_uri('/payment/success/'),
+        'failure_url': request.build_absolute_uri('/payment/failure/'),
+        'signed_field_names': 'total_amount,transaction_uuid,product_code',
+    }
+
+    # Generate signature
+    secret_key = "8gBm/:&EnhH.1/q"
+    
+    signature = generate_signature(payment_data['total_amount'], payment_data['transaction_uuid'], payment_data['product_code'], secret_key)
+
+    context = {
+        'payment_data': payment_data,
+        'signature': signature,
+        'esewa_payment_url': 'https://rc-epay.esewa.com.np/api/epay/main/v2/form',
+    }
+
+    return render(request, 'core/initiate_payment.html', context)
+
+
+@csrf_exempt
+def payment_success(request):
+    # Handle successful payment here
+    return render(request, 'payment/success.html')
+
+
+@csrf_exempt
+def payment_failure(request):
+    # Handle failed payment here
+    return render(request, 'payment/failure.html')

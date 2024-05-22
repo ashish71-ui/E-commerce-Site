@@ -74,7 +74,7 @@ TEMPLATES = [
         },
     },
 ]
-
+ESEWA_SECRET_KEY = 'AASHISH@&&&'
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 

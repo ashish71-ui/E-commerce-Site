@@ -12,13 +12,12 @@
           <!-- Main Product Image -->
           <img id="mainImage" class="w-full h-64 object-cover" src="{{ product.image.url }}" alt="Main Product Image" />
        
-          <div class=" flex flex-row justify-center mt-2 ml-5 ">
+          <div class="flex flex-row justify-center mt-2 ml-5 ">
             {% for p in p_image %}
-              <img class="h-56 w-56 ml-5 object-cover  cursor-pointer hover:border-gray-500" src="{{ p.images.url }}" alt="Secondary Image 1" onclick="changeImage('{{ p.images.url }}')" />
-              {% endfor %}
+              <img class="h-56 w-56 ml-5 object-cover cursor-pointer hover:border-gray-500" src="{{ p.images.url }}" alt="Secondary Image 1" onclick="changeImage('{{ p.images.url }}')" />
+            {% endfor %}
           </div>
         </div>
-       
       </div>
     </div>
   </div>
@@ -38,54 +37,47 @@
             <del class="font-bold">${{ product.old_price }}</del>
             <form action="{% url 'core:add_to_cart' product.pid %}" method="post">
               {% csrf_token %}
-              {% if request.user.is_authenticated%}
+              {% if request.user.is_authenticated %}
               <button class="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300">Add to Cart</button>
               {% else %}
-          </form>
+            </form>
             <a href="{% url 'userauths:loginform' %}" class="ml-4 flex items-center">
-              
               <button class="bg-blue-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300">Login to buy</button>
             </a>
-            
-            {% endif %}              </div>
-    </div>
+            {% endif %}
           </div>
         </div>
-        
       </div>
     </div>
   </div>
 </div>
 
-
 {% comment %} Related product view {% endcomment %}
 <div class="container mx-auto mt-16 ">
   <h2 class="text-2xl font-bold mb-8">Related Products</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {% for product in r_product %}
-      <!-- Product Card -->
-      <a href="{% url 'core:product_detail_view' product.pid %}">
+    {% for product in r_product %}
+    <!-- Product Card -->
+    <a href="{% url 'core:product_detail_view' product.pid %}">
       <div class="bg-white rounded-lg shadow-md overflow-hidden">
-          <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-64 object-cover">
-          <div class="p-4">
-              <h3 class="text-xl font-semibold mb-2">{{ product.title }}</h3>
-              <h3 class="text-2xl font-bold mb-2">{{ product.category.title }}</h3>
-              <h3 class="text-2xl font-bold mb-2">{{ product.vendor.title }}</h3>
-              <p class="text-gray-600">{{ product.description }}</p>
-              <p class="text-red-600">-{{ product.get_percentage |floatformat:0 }}</p>
-              <div class="mt-4 flex justify-between items-center">
-                  <span class="font-bold">${{ product.price }}</span>
-                  <del class="font-bold">${{ product.old_price }}</del>
-
-                  {% if request.user.is_authenticated%}
-                  <button class="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300">Add to Cart</button>
-                 
-                 
-                  {% endif %}              </div>
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-64 object-cover">
+        <div class="p-4">
+          <h3 class="text-xl font-semibold mb-2">{{ product.title }}</h3>
+          <h3 class="text-2xl font-bold mb-2">{{ product.category.title }}</h3>
+          <h3 class="text-2xl font-bold mb-2">{{ product.vendor.title }}</h3>
+          <p class="text-gray-600">{{ product.description }}</p>
+          <p class="text-red-600">-{{ product.get_percentage | floatformat:0 }}</p>
+          <div class="mt-4 flex justify-between items-center">
+            <span class="font-bold">${{ product.price }}</span>
+            <del class="font-bold">${{ product.old_price }}</del>
+            {% if request.user.is_authenticated %}
+            <button class="bg-gray-900 text-white px-4 py-2 rounded-full hover:bg-gray-800 transition duration-300">Add to Cart</button>
+            {% endif %}
           </div>
+        </div>
       </div>
-     </a>
-      {% endfor %}
+    </a>
+    {% endfor %}
   </div>
 </div>
 

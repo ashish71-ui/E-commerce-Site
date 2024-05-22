@@ -114,6 +114,7 @@
     
         <script src="https://unpkg.com/flowbite@1.4.0/dist/flowbite.js"></script>
     </div>
+    {% block content %}
     <div class="flex justify-center mt-4">
       <button id="filter-button" class="bg-orange-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
           Filters
@@ -188,14 +189,14 @@
 </script>
 
 
- 
+{% endblock content %}
 
 
       
       <footer class="bg-blue-900 mt-5 w-full">
         <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
           <div class="flex justify-between items-center text-gray-300">
-            <span>&copy; 2023 Your Website. All rights reserved.</span>
+            <span>&copy; 2024 Your Website. All rights reserved.</span>
             <div class="flex space-x-4">
               <a href="#" class="hover:text-white">Privacy Policy</a>
               <a href="#" class="hover:text-white">Terms of Service</a>
